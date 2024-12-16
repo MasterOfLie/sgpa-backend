@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: sgpa
+  datasource:
+    url: ${SPRING_URL_DB}
+    username: ${SPRING_DBUSER}
+    password: ${SPRING_PASSWORD_DB}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
