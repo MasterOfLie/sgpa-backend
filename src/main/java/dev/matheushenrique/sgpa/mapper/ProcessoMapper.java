@@ -7,10 +7,7 @@ import dev.matheushenrique.sgpa.models.Departamento;
 import dev.matheushenrique.sgpa.models.Processo;
 import dev.matheushenrique.sgpa.models.Servico;
 import dev.matheushenrique.sgpa.models.Setor;
-import dev.matheushenrique.sgpa.repository.DepartamentoRepository;
-import dev.matheushenrique.sgpa.repository.ProcessoRepository;
-import dev.matheushenrique.sgpa.repository.ServicoRepository;
-import dev.matheushenrique.sgpa.repository.SetorRepository;
+import dev.matheushenrique.sgpa.repository.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +22,7 @@ public class ProcessoMapper {
     private final DepartamentoRepository departamentoRepository;
     private final ServicoRepository servicoRepository;
     private final SetorRepository setorRepository;
+    private final UsuarioRepository usuarioRepository;
     
     public Processo toProcesso(ProcessoDTO processoDTO) throws EntityNotFoundException {
         return Processo.builder()
@@ -36,6 +34,8 @@ public class ProcessoMapper {
                         .orElseThrow(() -> new EntityNotFoundException("Serviço com o id " + processoDTO.getIdServico() + " não encontrado")))
                 .departamento(departamentoRepository.findById(processoDTO.getIdDepartamento())
                         .orElseThrow(() -> new EntityNotFoundException("Departamento com o id " + processoDTO.getIdDepartamento() + " não encontrado")))
+                .solicitante(usuarioRepository.findById(processoDTO.getIdSolicitante())
+                        .orElseThrow(() -> new EntityNotFoundException("Solicitante com o id " + processoDTO.getIdSolicitante() + " não encontrado")))
                 .build();
     }
 

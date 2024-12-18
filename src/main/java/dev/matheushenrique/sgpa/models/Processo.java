@@ -1,11 +1,19 @@
 package dev.matheushenrique.sgpa.models;
 
 import dev.matheushenrique.sgpa.enums.StatusEnum;
+import dev.matheushenrique.sgpa.models.utils.Protocolo;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.*;
+import org.hibernate.generator.EventType;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tb_processo")
@@ -19,9 +27,17 @@ public class Processo {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     @Lob
-    @Column(columnDefinition = "TEXT")
     private String description;
+
     private StatusEnum status = StatusEnum.ANDAMENTO;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "protocolo_id")
+    private Protocolo protocolo;
+
+    @CreationTimestamp
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "setor_id", nullable = false)
@@ -35,5 +51,7 @@ public class Processo {
     @JoinColumn(name = "departamento_id", nullable = false)
     private Departamento departamento;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "solicitante_id", nullable = false)
+    private Usuario solicitante ;
 }

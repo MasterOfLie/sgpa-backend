@@ -14,23 +14,29 @@ public class ProcessoResponseDTO {
     private String idSetor;
     private String setor;
     private String idServico;
-    private String Servico;
+    private String servico;
     private String idDepartamento;
     private String departamento;
+    private Long protocolo;
+    private String anoVigencia;
+    private String solicitante;
 
     public ProcessoResponseDTO() {
     }
 
-    public ProcessoResponseDTO(String id, String description, StatusEnum status, String idSetor, String setor, String idServico, String servico, String idDepartamento, String departamento) {
+    public ProcessoResponseDTO(String id, String description, StatusEnum status, String idSetor, String setor, String idServico, String servico, String idDepartamento, String departamento, Long protocolo, String anoVigencia, String solicitante) {
         this.id = id;
         this.description = description;
         this.status = status;
         this.idSetor = idSetor;
         this.setor = setor;
         this.idServico = idServico;
-        Servico = servico;
+        this.servico = servico;
         this.idDepartamento = idDepartamento;
         this.departamento = departamento;
+        this.protocolo = protocolo;
+        this.anoVigencia = anoVigencia;
+        this.solicitante = solicitante;
     }
 
 }

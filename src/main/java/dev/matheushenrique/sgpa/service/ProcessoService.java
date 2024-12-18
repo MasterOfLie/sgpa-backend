@@ -18,4 +18,5 @@ public interface ProcessoService {
      */
     ProcessoResponseDTO getProcesso(String idProcesso) throws EntityNotFoundException;
     List<Processo> findAll();
+    List<ProcessoResponseDTO> listarManual();
 }

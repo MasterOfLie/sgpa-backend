@@ -1,10 +1,6 @@
 package dev.matheushenrique.sgpa.dto;
 
 import dev.matheushenrique.sgpa.enums.StatusEnum;
-import dev.matheushenrique.sgpa.models.Departamento;
-import dev.matheushenrique.sgpa.models.Servico;
-import dev.matheushenrique.sgpa.models.Setor;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -23,4 +19,6 @@ public class ProcessoDTO {
     private String idServico;
     @NotBlank(message = "Não pode esta em branco")
     private String idDepartamento;
+    @NotBlank(message = "Não pode esta em branco")
+    private String idSolicitante;
 }

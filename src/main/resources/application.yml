@@ -9,3 +9,10 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
+    show-sql: true
+  mail:
+    host: mailpit.localhost
+    port: 1025
+    username:
+    password:
+    protocol: smtp

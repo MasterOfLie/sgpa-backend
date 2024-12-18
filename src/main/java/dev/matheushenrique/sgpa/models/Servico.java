@@ -16,7 +16,6 @@ public class Servico {
     private String id;
     private String name;
     @Lob
-    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

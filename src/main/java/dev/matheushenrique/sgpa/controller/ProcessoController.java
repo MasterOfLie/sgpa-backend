@@ -9,6 +9,8 @@ import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
 import dev.matheushenrique.sgpa.mapper.ProcessoMapper;
 import dev.matheushenrique.sgpa.models.Processo;
 import dev.matheushenrique.sgpa.repository.ProcessoRepository;
+import dev.matheushenrique.sgpa.repository.ServicoRepository;
+import dev.matheushenrique.sgpa.repository.SetorRepository;
 import dev.matheushenrique.sgpa.service.ProcessoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/processo")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ProcessoController {
     private final ProcessoService processoService;
     private final ProcessoMapper processoMapper;
@@ -32,7 +35,7 @@ public class ProcessoController {
     public ResponseEntity<?> addProcesso(@Valid @RequestBody ProcessoDTO processoDTO) {
         try {
             Processo processo = processoService.save(processoMapper.toProcesso(processoDTO));
-            return new ResponseEntity<>(processoMapper.toProcessoResponseDTO(processo), HttpStatus.CREATED);
+            return new ResponseEntity<>(processoService.getProcesso(processo.getId()), HttpStatus.CREATED);
         } catch (EntityCreationException e) {
             ErroResponse error = ErroResponse.defaultResponse(e.getMessage());
             return ResponseEntity.status(error.status()).body(error);
@@ -43,6 +46,7 @@ public class ProcessoController {
         List<ProcessoResponseDTO> processoResponseDTOList = processoService.listProcessos();
         return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
     }
+
     @PutMapping("/{idProcesso}")
     @Transactional
     public ResponseEntity<?> updateProcesso(@PathVariable("idProcesso") String idProcesso, @Valid @RequestBody ProcessoDTO processoDTO) {
