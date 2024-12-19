@@ -1,21 +1,25 @@
 package dev.matheushenrique.sgpa.service.impl;
 
 import dev.matheushenrique.sgpa.models.utils.Email;
+import dev.matheushenrique.sgpa.service.ApplicationConfigService;
 import dev.matheushenrique.sgpa.service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
+    private final ApplicationConfigService applicationConfigService;
 
     @Override
-    public void sendEmail(Email email) {
+    public void sendSimpleEmail(Email email) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply@matheushenrique.dev.br");
         message.setTo(email.getTo());
@@ -23,15 +27,24 @@ public class EmailServiceImpl implements EmailService {
         message.setText(email.getBody());
         mailSender.send(message);
     }
-    public void sendEmailHtml(Email email) throws Exception {
+
+    @Override
+    public void sendEmail(Email email) {
+        try {
+            sendEmailHtmlService(email);
+        }catch (Exception e){
+            log.error("Foi identificado um erro ao enviar o e-mail. Por favor, verifique os dados do usuário ou o servidor SMTP. LOG: " +  e.getMessage());
+        }
+    }
+
+    private void sendEmailHtmlService(Email email) throws Exception {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper emailSender = new MimeMessageHelper(message, true);
 
-        emailSender.setFrom("noreply@matheushenrique.dev.br", "SGPA - MATHEUS HENRIQUE");
+        emailSender.setFrom("noreply@matheushenrique.dev.br", applicationConfigService.getApplicationName("settings::app:Name").getValue());
         emailSender.setTo(email.getTo());
         emailSender.setSubject(email.getSubject());
 
-        // HTML content
         String htmlContent = "<!DOCTYPE html>" +
                 "<html lang=\"pt-br\">" +
                 "<head>" +

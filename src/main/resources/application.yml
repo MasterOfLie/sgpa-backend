@@ -11,8 +11,15 @@ spring:
     open-in-view: false
     show-sql: true
   mail:
-    host: mailpit.localhost
+    host: mailpit.matheushenrique.dev.br
     port: 1025
     username:
     password:
     protocol: smtp
+logging:
+  file:
+    path: logs
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 10

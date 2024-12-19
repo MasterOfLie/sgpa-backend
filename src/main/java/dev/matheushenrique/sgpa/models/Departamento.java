@@ -21,4 +21,7 @@ public class Departamento {
 
     @OneToMany(mappedBy = "departamento", fetch = FetchType.LAZY)
     private List<Processo> processos;
+
+    @ManyToMany(mappedBy = "departamentos", fetch = FetchType.LAZY)
+    private List<Usuario> usuarios;
 }

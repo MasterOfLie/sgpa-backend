@@ -9,7 +9,7 @@ public class UsuarioMapper {
 
     public Usuario toUsuario(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
-        usuario.setFistName(usuarioDTO.getFistName());
+        usuario.setFirstName(usuarioDTO.getFirstName());
         usuario.setLastName(usuarioDTO.getLastName());
         usuario.setEmail(usuarioDTO.getEmail());
         usuario.setPassword(usuarioDTO.getPassword());

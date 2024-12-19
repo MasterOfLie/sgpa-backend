@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +37,13 @@ public class ProcessoController {
         try {
             Processo processo = processoService.save(processoMapper.toProcesso(processoDTO));
             return new ResponseEntity<>(processoService.getProcesso(processo.getId()), HttpStatus.CREATED);
-        } catch (EntityCreationException e) {
+        } catch (EntityCreationException | EntityNotFoundException e) {
             ErroResponse error = ErroResponse.defaultResponse(e.getMessage());
             return ResponseEntity.status(error.status()).body(error);
         }
     }
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> findAll() {
         List<ProcessoResponseDTO> processoResponseDTOList = processoService.listProcessos();
         return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
@@ -59,7 +61,9 @@ public class ProcessoController {
         }
     }
     //TODO E POSSIVEL DELETAR PROCESSO?
+
     @GetMapping("/{idProcesso}")
+    @PreAuthorize("hasAuthority('ROLE_MESTRE')")
     public ResponseEntity<?> getProcesso(@PathVariable("idProcesso") String idProcesso) {
         try {
             ProcessoResponseDTO processo = processoService.getProcesso(idProcesso);

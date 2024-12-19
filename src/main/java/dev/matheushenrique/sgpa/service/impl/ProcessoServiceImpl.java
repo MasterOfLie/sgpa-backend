@@ -72,7 +72,7 @@ public class ProcessoServiceImpl implements ProcessoService {
         return processoRepository.findAll().stream().map(
                 processo -> (new ProcessoResponseDTO(processo.getId(), processo.getDescription(), processo.getStatus(),
                         processo.getSetor().getId(), processo.getSetor().getName(), processo.getServico().getId(), processo.getServico().getName(), processo.getDepartamento().getId(),
-                        processo.getDepartamento().getName(), processo.getProtocolo().getId(), processo.getProtocolo().getAnoVigencia(), processo.getSolicitante().getFistName()
+                        processo.getDepartamento().getName(), processo.getProtocolo().getId(), processo.getProtocolo().getAnoVigencia(), processo.getSolicitante().getFirstName()
                 ))
         ).collect(Collectors.toList());
     }
