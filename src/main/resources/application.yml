@@ -27,18 +27,18 @@ logging:
 aws:
 sgpa:
   storage:
-    provider: AZURE # 'AZURE' ou 'S3'
+    provider: ${STORAGE_PROVIDER} # 'AZURE' ou 'S3'
   upload:
-    service: S3 # AWS, R2, MinIO, Supabase, Blob.
+    service: ${STORAGE_SERVICE} # AWS, R2, MinIO, Supabase, Blob.
     config:
       s3:
-        endpoint:
-        accesskey:
-        secretkey:
+        endpoint: ${STORAGE_ENDPOINT}
+        accesskey: ${STORAGE_ACCESSKEY}
+        secretkey: ${STORAGE_SECRETKEY}
         region:
-          name:
+          name: ${STORAGE_REGION}
         bucket:
-          name:
+          name: ${STORAGE_BUCKET}
       azure:
-        connectio-string:
-        container-name:
+        connectio-string: ${STORAGE_STRING}
+        container-name: ${STORAGE_CONTAINER}

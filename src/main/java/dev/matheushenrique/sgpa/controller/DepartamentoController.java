@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class DepartamentoController {
     private final DepartamentoMapper departamentoMapper;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CRIAR_DEPARTAMENTO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createDepartamento(@Valid @RequestBody DepartamentoDTO departamentoDTO) {
         try {
             Departamento departamentoSalvo = departamentoService.createDepartamento(departamentoMapper.toDepartamento(departamentoDTO));
@@ -43,6 +45,7 @@ public class DepartamentoController {
     }
 
     @PutMapping("/{idDepartamento}")
+    @PreAuthorize("hasAuthority('ROLE_EDITAR_DEPARTAMENTO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateDepartamento(@PathVariable("idDepartamento") String idDepartamento, @Valid @RequestBody DepartamentoDTO departamentoDTO) {
         try {
             Departamento departamentoAtualizado = departamentoService.updateDepartamentor(idDepartamento, departamentoMapper.toDepartamento(departamentoDTO));
@@ -53,6 +56,7 @@ public class DepartamentoController {
         }
     }
     @DeleteMapping("/{idDepartamento}")
+    @PreAuthorize("hasAuthority('ROLE_DELETAR_DEPARTAMENTO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteDepartamento(@PathVariable("idDepartamento") String idDepartamento) {
         try {
             departamentoService.deleteDepartamento(idDepartamento);

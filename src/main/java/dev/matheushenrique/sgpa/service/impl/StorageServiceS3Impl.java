@@ -24,7 +24,7 @@ import java.time.Duration;
 @Service
 @ConditionalOnProperty(name = "sgpa.storage.provider", havingValue = "S3")
 public class StorageServiceS3Impl implements StorageService {
-    @Value("${sgpa.info.bucket.name}")
+    @Value("${sgpa.info.bucket.name:default}")
     private String bucketName;
     private final S3Client s3Client;
     private final S3Presigner s3Presigner;

@@ -21,8 +21,6 @@ public class StorageServiceAzureImpl implements StorageService {
 
     private final BlobContainerClient blobContainerClient;
 
-
-
     @Override
     public String uploadFile(MultipartFile file, String fileName) throws IOException {
         BlobClient blobClient = blobContainerClient.getBlobClient(fileName);

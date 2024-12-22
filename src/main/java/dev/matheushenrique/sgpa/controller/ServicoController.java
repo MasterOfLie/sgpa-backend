@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +29,15 @@ public class ServicoController {
 
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_SERVICO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<ServicoResponseDTO>> findAll() {
         List<ServicoResponseDTO> servicos = servicoService.getAllServicos();
         return ResponseEntity.status(HttpStatus.OK).body(servicos);
     }
 
     @PostMapping
-    @Transactional
+    @Transactional //TODO REMOVER
+    @PreAuthorize("hasAuthority('ROLE_CRIAR_SERVICO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createServico(@Valid @RequestBody ServicoDTO servicoDTO) {
         try {
             Servico servicoSalvo = servicoService.createServico(servicoMapper.toServico(servicoDTO));
@@ -46,7 +49,8 @@ public class ServicoController {
     }
 
     @PutMapping("/{idServico}")
-    @Transactional
+    @Transactional //TODO REMOVER
+    @PreAuthorize("hasAuthority('ROLE_EDITAR_SERVICO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateServico(@PathVariable("idServico") String idServico, @Valid @RequestBody ServicoDTO servicoDTO) {
         try {
             Servico servico = servicoService.updateServico(idServico, servicoMapper.toServico(servicoDTO));
@@ -57,6 +61,7 @@ public class ServicoController {
         }
     }
     @DeleteMapping("/{idServico}")
+    @PreAuthorize("hasAuthority('ROLE_EDITAR_SERVICO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteServico(@PathVariable("idServico") String idServico) {
         try {
             servicoService.deleteServico(idServico);
@@ -67,6 +72,7 @@ public class ServicoController {
         }
     }
     @GetMapping("{idServico}")
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_SERVICO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getServico(@PathVariable("idServico") String idServico) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicoMapper.toServicoResponseDTO(servicoService.getServico(idServico)));

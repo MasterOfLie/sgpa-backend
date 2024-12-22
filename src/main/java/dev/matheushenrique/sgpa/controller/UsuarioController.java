@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class UsuarioController {
     }
 
     @PostMapping("perfil")
+    @PreAuthorize("hasAuthority('ROLE_ATRIBUIR_PERFIL') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> addPerfilToUsuario(@Valid @RequestBody UsuarioPerfilDTO usuarioPerfilDTO) {
         try {
             UsuarioPerfilResponseDTO responseDTO = usuarioMapper.toUsuarioPerfilResponseDTO(usuarioService.addPerfilToUsuario(usuarioPerfilDTO.getIdUsuario(), usuarioPerfilDTO.getIdPerfil()));

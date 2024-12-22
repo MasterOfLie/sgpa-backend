@@ -51,6 +51,8 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "perfil_id")
     private Perfil perfil;
 
+    private boolean isAdmin = false;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "tb_usuario_departamentos",
@@ -65,6 +67,10 @@ public class Usuario implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
+        if(isAdmin){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            return authorities;
+        }
         if (perfil == null) {
             authorities.add(new SimpleGrantedAuthority("ROLE_USUARIO"));
             return authorities;

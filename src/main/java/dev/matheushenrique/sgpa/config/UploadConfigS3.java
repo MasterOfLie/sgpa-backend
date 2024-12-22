@@ -19,15 +19,15 @@ import java.net.URI;
 @ConditionalOnProperty(name = "sgpa.storage.provider", havingValue = "S3")
 public class UploadConfigS3 {
 
-    @Value("${sgpa.upload.service}")
+    @Value("${sgpa.upload.service:default}")
     private String serviceType;
     @Value("${sgpa.upload.config.s3.region.name:sgpa}")
     private String regionName;
     @Value("${sgpa.upload.config.s3.endpoint:sgpa.local.hot}")
     private String endpoint;
-    @Value("${sgpa.upload.config.s3.accesskey}")
+    @Value("${sgpa.upload.config.s3.accesskey:default}")
     private String accessKey;
-    @Value("${sgpa.upload.config.s3.secretkey}")
+    @Value("${sgpa.upload.config.s3.secretkey:default}")
     private String secretKey;
 
     @Bean

@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class SetorController {
     private final SetorMapper setorMapper;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_SETOR') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<SetorDTO>> getAllSetores() {
         List<Setor> setors = setorService.getAllSetores();
         List<SetorDTO> setorDTOList = setors.stream().map(setorMapper::toSetorDTO).collect(Collectors.toList());
@@ -31,6 +33,7 @@ public class SetorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_CRIAR_SETOR') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createSetor(@Valid @RequestBody SetorDTO setorDTO) {
         try {
             Setor setorSalvo = setorService.createSetor(setorMapper.toSetor(setorDTO));
@@ -41,6 +44,7 @@ public class SetorController {
         }
     }
     @PutMapping("/{idSetor}")
+    @PreAuthorize("hasAuthority('ROLE_EDITAR_SETOR') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateSetor(@PathVariable("idSetor") String idSetor, @Valid @RequestBody SetorDTO setorDTO) {
         try {
             Setor setorAtualizado = setorService.updateSetor(idSetor, setorMapper.toSetor(setorDTO));
@@ -51,6 +55,7 @@ public class SetorController {
         }
     }
     @DeleteMapping("/{idSetor}")
+    @PreAuthorize("hasAuthority('ROLE_DELETAR_SETOR') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteSetor(@PathVariable("idSetor") String idSetor) {
         try {
             setorService.deleteSetor(idSetor);
@@ -61,6 +66,7 @@ public class SetorController {
         }
     }
     @GetMapping("{idSetor}")
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_SETOR') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getSetor(@PathVariable("idSetor") String idSetor) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(setorMapper.toSetorDTO(setorService.getSetor(idSetor)));

@@ -30,8 +30,9 @@ public class ProcessoController {
     private final ProcessoRepository processoRepository;
 
     @PostMapping
-    @Transactional
-    public ResponseEntity<?> addProcesso(@Valid @RequestBody ProcessoDTO processoDTO) {
+    @Transactional //TODO REMOVER TRANSACTIONAL
+    @PreAuthorize("hasAuthority('ROLE_CRIAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> createProcesso(@Valid @RequestBody ProcessoDTO processoDTO) {
         try {
             Processo processo = processoService.createProcesso(processoMapper.toProcesso(processoDTO));
             return new ResponseEntity<>(processoService.getProcesso(processo.getId()), HttpStatus.CREATED);
@@ -41,7 +42,7 @@ public class ProcessoController {
         }
     }
     @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> findAll() {
         List<ProcessoResponseDTO> processoResponseDTOList = processoService.getAllProcessos();
         return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
@@ -54,6 +55,7 @@ public class ProcessoController {
     }
 
     @GetMapping("/solicitante/{idSolicitante}")
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> allProcessoSolicitante(@PathVariable("idSolicitante") String idSolicitante) {
         try {
             List<ProcessoResponseDTO> processoResponseDTOList = processoService.getProcessosSolicitados(idSolicitante);
@@ -66,7 +68,8 @@ public class ProcessoController {
     }
 
     @PutMapping("/{idProcesso}")
-    @Transactional
+    @Transactional //TODO REMOVER
+    @PreAuthorize("hasAuthority('ROLE_EDITAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateProcesso(@PathVariable("idProcesso") String idProcesso, @Valid @RequestBody ProcessoDTO processoDTO) {
         try {
             Processo processo = processoService.updateProcesso(idProcesso, processoMapper.toProcesso(processoDTO));
@@ -79,6 +82,7 @@ public class ProcessoController {
     //TODO E POSSIVEL DELETAR PROCESSO?
 
     @GetMapping("/{idProcesso}")
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> getProcesso(@PathVariable("idProcesso") String idProcesso) {
         try {
             ProcessoResponseDTO processo = processoService.getProcesso(idProcesso);
