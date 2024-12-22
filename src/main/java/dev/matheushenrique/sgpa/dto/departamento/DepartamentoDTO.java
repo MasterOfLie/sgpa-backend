@@ -1,15 +1,16 @@
-package dev.matheushenrique.sgpa.dto;
+package dev.matheushenrique.sgpa.dto.departamento;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SetorDTO {
+public class DepartamentoDTO {
 
     private String id;
     @NotBlank(message = "Nome não pode estar em branco")
     private String name;
     private String description;
+
+
 
 }

@@ -3,8 +3,10 @@ package dev.matheushenrique.sgpa.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,12 +24,10 @@ public class Usuario implements UserDetails {
     private String password;
     @Column(unique = true,nullable = false)
     private String cpfCnpj;
-    private String telefoneNumber;
+    private String phoneNumber;
     /** Endereço **/
     private String addressLine;
     /** Nome da rua **/
-    private String streetName;
-    /** Número da residência **/
     private String houseNumber;
     /** Código postal **/
     private String postalCode;
@@ -44,6 +44,13 @@ public class Usuario implements UserDetails {
     private List<Processo> processosSolicitados;
 
 
+    @OneToMany(mappedBy = "funcionario", fetch = FetchType.LAZY)
+    private List<Processo> processosAbertos;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "perfil_id")
+    private Perfil perfil;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "tb_usuario_departamentos",
@@ -52,9 +59,18 @@ public class Usuario implements UserDetails {
     )
     private List<Departamento> departamentos;
 
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Arquivo> arquivos;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (perfil == null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USUARIO"));
+            return authorities;
+        }
+        perfil.getListPermissions().stream().map(permission -> new SimpleGrantedAuthority(permission.getPermission())).forEach(authorities::add);
+        return authorities;
     }
 
     @Override
@@ -81,4 +97,5 @@ public class Usuario implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

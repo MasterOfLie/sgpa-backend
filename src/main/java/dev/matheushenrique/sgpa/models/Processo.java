@@ -3,17 +3,15 @@ package dev.matheushenrique.sgpa.models;
 import dev.matheushenrique.sgpa.enums.StatusEnum;
 import dev.matheushenrique.sgpa.models.utils.Protocolo;
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.*;
-import org.hibernate.generator.EventType;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_processo")
@@ -54,4 +52,11 @@ public class Processo {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solicitante_id", nullable = false)
     private Usuario solicitante ;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "funcionario_id")
+    private Usuario funcionario ;
+
+    @OneToMany(mappedBy = "processo", fetch = FetchType.LAZY)
+    private List<Arquivo> arquivos;
 }

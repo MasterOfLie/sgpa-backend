@@ -1,18 +1,13 @@
 package dev.matheushenrique.sgpa.mapper;
 
-import dev.matheushenrique.sgpa.dto.ProcessoDTO;
-import dev.matheushenrique.sgpa.dto.ProcessoResponseDTO;
+import dev.matheushenrique.sgpa.dto.processo.ProcessoDTO;
+import dev.matheushenrique.sgpa.dto.processo.ProcessoResponseDTO;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
-import dev.matheushenrique.sgpa.models.Departamento;
 import dev.matheushenrique.sgpa.models.Processo;
-import dev.matheushenrique.sgpa.models.Servico;
-import dev.matheushenrique.sgpa.models.Setor;
 import dev.matheushenrique.sgpa.repository.*;
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Data
 @Component

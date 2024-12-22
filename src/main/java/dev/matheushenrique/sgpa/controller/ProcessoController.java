@@ -1,16 +1,14 @@
 package dev.matheushenrique.sgpa.controller;
 
 import dev.matheushenrique.sgpa.dto.ErroResponse;
-import dev.matheushenrique.sgpa.dto.ProcessoDTO;
-import dev.matheushenrique.sgpa.dto.ProcessoResponseDTO;
+import dev.matheushenrique.sgpa.dto.processo.ProcessoDTO;
+import dev.matheushenrique.sgpa.dto.processo.ProcessoResponseDTO;
 import dev.matheushenrique.sgpa.exception.EntityCreationException;
 import dev.matheushenrique.sgpa.exception.EntityErrorException;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
 import dev.matheushenrique.sgpa.mapper.ProcessoMapper;
 import dev.matheushenrique.sgpa.models.Processo;
 import dev.matheushenrique.sgpa.repository.ProcessoRepository;
-import dev.matheushenrique.sgpa.repository.ServicoRepository;
-import dev.matheushenrique.sgpa.repository.SetorRepository;
 import dev.matheushenrique.sgpa.service.ProcessoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +33,7 @@ public class ProcessoController {
     @Transactional
     public ResponseEntity<?> addProcesso(@Valid @RequestBody ProcessoDTO processoDTO) {
         try {
-            Processo processo = processoService.save(processoMapper.toProcesso(processoDTO));
+            Processo processo = processoService.createProcesso(processoMapper.toProcesso(processoDTO));
             return new ResponseEntity<>(processoService.getProcesso(processo.getId()), HttpStatus.CREATED);
         } catch (EntityCreationException | EntityNotFoundException e) {
             ErroResponse error = ErroResponse.defaultResponse(e.getMessage());
@@ -45,8 +43,26 @@ public class ProcessoController {
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> findAll() {
-        List<ProcessoResponseDTO> processoResponseDTOList = processoService.listProcessos();
+        List<ProcessoResponseDTO> processoResponseDTOList = processoService.getAllProcessos();
         return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
+    }
+
+    @GetMapping("/solicitante")
+    public ResponseEntity<?> allProcessoSolicitante() {
+        List<ProcessoResponseDTO> processoResponseDTOList = processoService.getProcessosSolicitados();
+        return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
+    }
+
+    @GetMapping("/solicitante/{idSolicitante}")
+    public ResponseEntity<?> allProcessoSolicitante(@PathVariable("idSolicitante") String idSolicitante) {
+        try {
+            List<ProcessoResponseDTO> processoResponseDTOList = processoService.getProcessosSolicitados(idSolicitante);
+            return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
+        }catch (EntityNotFoundException e) {
+            ErroResponse error = ErroResponse.defaultResponse(e.getMessage());
+            return ResponseEntity.status(error.status()).body(error);
+        }
+
     }
 
     @PutMapping("/{idProcesso}")
@@ -63,7 +79,6 @@ public class ProcessoController {
     //TODO E POSSIVEL DELETAR PROCESSO?
 
     @GetMapping("/{idProcesso}")
-    @PreAuthorize("hasAuthority('ROLE_MESTRE')")
     public ResponseEntity<?> getProcesso(@PathVariable("idProcesso") String idProcesso) {
         try {
             ProcessoResponseDTO processo = processoService.getProcesso(idProcesso);

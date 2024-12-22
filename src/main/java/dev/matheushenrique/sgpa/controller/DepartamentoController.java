@@ -1,15 +1,12 @@
 package dev.matheushenrique.sgpa.controller;
 
-import dev.matheushenrique.sgpa.dto.DepartamentoDTO;
+import dev.matheushenrique.sgpa.dto.departamento.DepartamentoDTO;
 import dev.matheushenrique.sgpa.dto.ErroResponse;
-import dev.matheushenrique.sgpa.dto.SetorDTO;
 import dev.matheushenrique.sgpa.exception.EntityCreationException;
 import dev.matheushenrique.sgpa.exception.EntityErrorException;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
 import dev.matheushenrique.sgpa.mapper.DepartamentoMapper;
-import dev.matheushenrique.sgpa.mapper.SetorMapper;
 import dev.matheushenrique.sgpa.models.Departamento;
-import dev.matheushenrique.sgpa.models.Setor;
 import dev.matheushenrique.sgpa.service.DepartamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +25,9 @@ public class DepartamentoController {
     private final DepartamentoMapper departamentoMapper;
 
     @PostMapping
-    public ResponseEntity<?> addDepartamento(@Valid @RequestBody DepartamentoDTO departamentoDTO) {
+    public ResponseEntity<?> createDepartamento(@Valid @RequestBody DepartamentoDTO departamentoDTO) {
         try {
-            Departamento departamentoSalvo = departamentoService.save(departamentoMapper.toDepartamento(departamentoDTO));
+            Departamento departamentoSalvo = departamentoService.createDepartamento(departamentoMapper.toDepartamento(departamentoDTO));
             return new ResponseEntity<>(departamentoMapper.toDepartamentoDTO(departamentoSalvo), HttpStatus.CREATED);
         } catch (EntityCreationException e) {
             ErroResponse error = ErroResponse.defaultResponse(e.getMessage());
@@ -39,8 +36,8 @@ public class DepartamentoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DepartamentoDTO>> findAll() {
-        List<Departamento> departamentos = departamentoService.findAll();
+    public ResponseEntity<List<DepartamentoDTO>> getAllDepartamento() {
+        List<Departamento> departamentos = departamentoService.getAllDepartamento();
         List<DepartamentoDTO> departamentoDTOList = departamentos.stream().map(departamentoMapper::toDepartamentoDTO).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(departamentoDTOList);
     }

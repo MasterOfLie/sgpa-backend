@@ -1,9 +1,7 @@
 package dev.matheushenrique.sgpa.mapper;
 
-import dev.matheushenrique.sgpa.dto.DepartamentoDTO;
-import dev.matheushenrique.sgpa.dto.SetorDTO;
+import dev.matheushenrique.sgpa.dto.departamento.DepartamentoDTO;
 import dev.matheushenrique.sgpa.models.Departamento;
-import dev.matheushenrique.sgpa.models.Setor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

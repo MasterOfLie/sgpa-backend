@@ -1,4 +1,4 @@
-package dev.matheushenrique.sgpa.dto;
+package dev.matheushenrique.sgpa.dto.processo;
 
 import dev.matheushenrique.sgpa.enums.StatusEnum;
 import jakarta.validation.constraints.NotBlank;

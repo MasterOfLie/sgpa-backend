@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface SetorService {
 
-    Setor save(Setor setor) throws EntityCreationException;
-    List<Setor> findAll();
+    Setor createSetor(Setor setor) throws EntityCreationException;
+    List<Setor> getAllSetores();
     Setor updateSetor(String idSetor, Setor setor) throws EntityNotFoundException, EntityErrorException;
     void deleteSetor(String idSetor) throws EntityNotFoundException;
     Setor getSetor(String idSetor) throws EntityNotFoundException;

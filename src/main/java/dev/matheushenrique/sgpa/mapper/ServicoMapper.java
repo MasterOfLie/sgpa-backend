@@ -1,8 +1,8 @@
 package dev.matheushenrique.sgpa.mapper;
 
 
-import dev.matheushenrique.sgpa.dto.ServicoDTO;
-import dev.matheushenrique.sgpa.dto.ServicoResponseDTO;
+import dev.matheushenrique.sgpa.dto.servico.ServicoDTO;
+import dev.matheushenrique.sgpa.dto.servico.ServicoResponseDTO;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
 import dev.matheushenrique.sgpa.models.Departamento;
 import dev.matheushenrique.sgpa.models.Servico;

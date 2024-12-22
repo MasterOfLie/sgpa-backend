@@ -1,5 +1,6 @@
 package dev.matheushenrique.sgpa.service.impl;
 
+import dev.matheushenrique.sgpa.component.UsuarioAuthenticated;
 import dev.matheushenrique.sgpa.exception.EntityCreationException;
 import dev.matheushenrique.sgpa.exception.EntityErrorException;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
@@ -7,26 +8,31 @@ import dev.matheushenrique.sgpa.models.Setor;
 import dev.matheushenrique.sgpa.repository.SetorRepository;
 import dev.matheushenrique.sgpa.service.SetorService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SetorServiceImpl implements SetorService {
 
     private final SetorRepository setorRepository;
+    private final UsuarioAuthenticated usuarioAuthenticated;
 
     @Override
-    public Setor save(Setor setor) throws EntityCreationException {
+    public Setor createSetor(Setor setor) throws EntityCreationException {
         if (setorRepository.existsByName(setor.getName())) {
             throw new EntityCreationException("Já existe uma setor com o nome " + setor.getName());
         }
-        return setorRepository.save(setor);
+        setorRepository.save(setor);
+        log.info("Setor {} com ID: {} foi criado com sucesso pelo usuário '{}'.", setor.getName(), setor.getId(), usuarioAuthenticated.getUsuarioAuthenticatedInfo());
+        return setor;
     }
 
     @Override
-    public List<Setor> findAll() {
+    public List<Setor> getAllSetores() {
         return setorRepository.findAll();
     }
 

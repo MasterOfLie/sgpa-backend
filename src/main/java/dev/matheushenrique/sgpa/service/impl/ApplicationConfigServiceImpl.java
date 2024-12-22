@@ -8,8 +8,6 @@ import dev.matheushenrique.sgpa.service.ApplicationConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ApplicationConfigServiceImpl implements ApplicationConfigService {

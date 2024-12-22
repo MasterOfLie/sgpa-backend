@@ -1,6 +1,7 @@
 package dev.matheushenrique.sgpa.service.impl;
 
-import dev.matheushenrique.sgpa.dto.ServicoResponseDTO;
+import dev.matheushenrique.sgpa.component.UsuarioAuthenticated;
+import dev.matheushenrique.sgpa.dto.servico.ServicoResponseDTO;
 import dev.matheushenrique.sgpa.exception.EntityCreationException;
 import dev.matheushenrique.sgpa.exception.EntityErrorException;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
@@ -8,25 +9,31 @@ import dev.matheushenrique.sgpa.models.Servico;
 import dev.matheushenrique.sgpa.repository.ServicoRepository;
 import dev.matheushenrique.sgpa.service.ServicoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ServicoServiceImpl implements ServicoService {
     private final ServicoRepository servicoRepository;
+    private final UsuarioAuthenticated usuarioAuthenticated;
 
     @Override
-    public Servico save(Servico servico) throws EntityCreationException {
+    public Servico createServico(Servico servico) throws EntityCreationException {
         if(servicoRepository.existsByName((servico.getName()))){
             throw new EntityCreationException("Já existe uma servico com o nome " + servico.getName());
         };
-        return servicoRepository.save(servico);
+        servicoRepository.save(servico);
+        log.info("Serviço {} com ID: {} foi criado com sucesso pelo usuário '{}'.", servico.getName(), servico.getId(), usuarioAuthenticated.getUsuarioAuthenticatedInfo());
+        return servico;
     }
 
     @Override
-    public List<ServicoResponseDTO> listServico() {
+    public List<ServicoResponseDTO> getAllServicos() {
         return servicoRepository.listServico();
     }
 
@@ -51,13 +58,9 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Servico getServico(String idServico) throws EntityNotFoundException {
         return existServico(idServico);
-    }
-
-    @Override
-    public List<Servico> findAll() {
-        return servicoRepository.findAll();
     }
 
     private void existByNameAndId(String idServico, Servico servico) {

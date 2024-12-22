@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface DepartamentoService {
 
-    Departamento save(Departamento departamento) throws EntityCreationException;
+    Departamento createDepartamento(Departamento departamento) throws EntityCreationException;
 
-    List<Departamento> findAll();
+    List<Departamento> getAllDepartamento();
 
     Departamento updateDepartamentor(String idDepartamento, Departamento departamento) throws EntityNotFoundException, EntityErrorException;
 

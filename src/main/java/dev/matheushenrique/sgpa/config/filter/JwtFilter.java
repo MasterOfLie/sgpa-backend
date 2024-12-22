@@ -11,12 +11,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,13 +29,20 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = getToken(request);
         if (token != null){
             try {
-                String emailToken = jwtService.getIdFromToken(token);
-                Usuario usuario = usuarioService.findByEmail(emailToken);
+                String emailToken = jwtService.getEmailFromToken(token);
+                Usuario usuario = usuarioService.getUsuarioByEmail(emailToken);
                 setUserAsAuthenticated(usuario);
             }catch (InvalidTokenException e){
-                log.error("Token invalido: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token inválido ou expirado.\"}");
+                return;
             }catch (Exception e){
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Erro na validação do token. Por favor, faça login novamente ou entre em contato com o administrador do sistema.\"}");
                 log.error("Erro na verificação do token: "+ e.getMessage());
+                return;
             }
 
         }
@@ -57,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return null;
     }
     private void setUserAsAuthenticated(Usuario usuario) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

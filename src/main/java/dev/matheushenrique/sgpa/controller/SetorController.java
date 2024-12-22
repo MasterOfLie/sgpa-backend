@@ -1,6 +1,6 @@
 package dev.matheushenrique.sgpa.controller;
 import dev.matheushenrique.sgpa.dto.ErroResponse;
-import dev.matheushenrique.sgpa.dto.SetorDTO;
+import dev.matheushenrique.sgpa.dto.setor.SetorDTO;
 import dev.matheushenrique.sgpa.exception.EntityCreationException;
 import dev.matheushenrique.sgpa.exception.EntityErrorException;
 import dev.matheushenrique.sgpa.exception.EntityNotFoundException;
@@ -24,16 +24,16 @@ public class SetorController {
     private final SetorMapper setorMapper;
 
     @GetMapping
-    public ResponseEntity<List<SetorDTO>> findAll() {
-        List<Setor> setors = setorService.findAll();
+    public ResponseEntity<List<SetorDTO>> getAllSetores() {
+        List<Setor> setors = setorService.getAllSetores();
         List<SetorDTO> setorDTOList = setors.stream().map(setorMapper::toSetorDTO).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(setorDTOList);
     }
 
     @PostMapping
-    public ResponseEntity<?> addSetor(@Valid @RequestBody SetorDTO setorDTO) {
+    public ResponseEntity<?> createSetor(@Valid @RequestBody SetorDTO setorDTO) {
         try {
-            Setor setorSalvo = setorService.save(setorMapper.toSetor(setorDTO));
+            Setor setorSalvo = setorService.createSetor(setorMapper.toSetor(setorDTO));
             return new ResponseEntity<>(setorMapper.toSetorDTO(setorSalvo), HttpStatus.CREATED);
         } catch (EntityCreationException e) {
             ErroResponse error = ErroResponse.defaultResponse(e.getMessage());

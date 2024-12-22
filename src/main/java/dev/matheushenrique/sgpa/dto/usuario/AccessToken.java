@@ -1,4 +1,4 @@
-package dev.matheushenrique.sgpa.dto;
+package dev.matheushenrique.sgpa.dto.usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package dev.matheushenrique.sgpa.dto;
+package dev.matheushenrique.sgpa.dto.servico;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

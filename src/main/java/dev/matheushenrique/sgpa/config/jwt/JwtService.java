@@ -1,6 +1,6 @@
 package dev.matheushenrique.sgpa.config.jwt;
 
-import dev.matheushenrique.sgpa.dto.AccessToken;
+import dev.matheushenrique.sgpa.dto.usuario.AccessToken;
 import dev.matheushenrique.sgpa.exception.InvalidTokenException;
 import dev.matheushenrique.sgpa.models.Usuario;
 import io.jsonwebtoken.JwtException;
@@ -31,7 +31,7 @@ public class JwtService {
         return new AccessToken(token);
     }
 
-    public String getIdFromToken(String tokenJwt){
+    public String getEmailFromToken(String tokenJwt){
         try {
             return Jwts.parser().verifyWith(keyGenerator.getSecretKey()).build()
                     .parseSignedClaims(tokenJwt).getPayload().getSubject();
