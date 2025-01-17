@@ -3,6 +3,7 @@ package dev.matheushenrique.sgpa.service.impl;
 import dev.matheushenrique.sgpa.component.UsuarioAuthenticated;
 import dev.matheushenrique.sgpa.dto.ArquivoDTO;
 import dev.matheushenrique.sgpa.dto.ArquivoResponseDTO;
+import dev.matheushenrique.sgpa.dto.PageResponseDTO;
 import dev.matheushenrique.sgpa.dto.processo.ProcessoResponseDTO;
 import dev.matheushenrique.sgpa.exception.EntityCreationException;
 import dev.matheushenrique.sgpa.exception.EntityErrorException;
@@ -17,6 +18,8 @@ import dev.matheushenrique.sgpa.service.EmailService;
 import dev.matheushenrique.sgpa.service.ProcessoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +51,11 @@ public class ProcessoServiceImpl implements ProcessoService {
     @Override
     public List<ProcessoResponseDTO> getAllProcessos() {
         return processoRepository.listProcessos();
+    }
+
+    @Override
+    public PageResponseDTO<ProcessoResponseDTO> getAllProcessos(Pageable pageable) {
+        return new PageResponseDTO<>(processoRepository.listProcessosPage(pageable));
     }
 
     @Override

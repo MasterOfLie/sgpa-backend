@@ -12,6 +12,9 @@ import dev.matheushenrique.sgpa.repository.ProcessoRepository;
 import dev.matheushenrique.sgpa.service.ProcessoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,12 +44,19 @@ public class ProcessoController {
             return ResponseEntity.status(error.status()).body(error);
         }
     }
-    @GetMapping
+    @GetMapping("all")
     @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> findAll() {
         List<ProcessoResponseDTO> processoResponseDTOList = processoService.getAllProcessos();
         return ResponseEntity.status(HttpStatus.OK).body(processoResponseDTOList);
     }
+
+    @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_VISUALIZAR_PROCESSO') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> getAllProcessosPage(@PageableDefault Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(processoService.getAllProcessos(pageable));
+    }
+
 
     @GetMapping("/solicitante")
     public ResponseEntity<?> allProcessoSolicitante() {
@@ -92,4 +102,5 @@ public class ProcessoController {
             return ResponseEntity.status(error.status()).body(error);
         }
     }
+
 }
